@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cuedup - Android App Prototype</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-slate-950 text-white flex justify-center items-center min-h-screen p-4">
+
+  <!-- Mobile Device Frame -->
+  <div class="w-full max-w-[390px] h-[780px] bg-[#121214] rounded-[44px] border-[6px] border-slate-800 shadow-2xl flex flex-col overflow-hidden relative">
+
+    <!-- Status Bar -->
+    <div class="pt-3 px-6 pb-2 flex justify-between items-center text-xs font-semibold text-slate-400 select-none z-20 bg-[#121214]">
+      <span>9:41</span>
+      <div class="w-20 h-4 bg-black rounded-full mx-auto"></div>
+      <div class="flex items-center space-x-1.5">
+        <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9 0 2.12.74 4.07 1.97 5.61L4.35 19.4c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0l1.9-1.9C9.2 19.53 10.55 20 12 20c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+        <span class="text-[10px]">5G</span>
+        <div class="w-5 h-2.5 border border-slate-400 rounded-sm p-0.5"><div class="h-full bg-slate-200 rounded-2px w-3/4"></div></div>
+      </div>
+    </div>
+
+    <!-- Main Dynamic Screen Content Area -->
+    <div id="screen-container" class="flex-1 overflow-y-auto no-scrollbar px-4 pt-2 pb-24">
+
+      <!-- SCREEN 1: HOME TAB (DEFAULT) -->
+      <div id="tab-home" class="space-y-4">
+        <!-- Top App Bar -->
+        <div class="flex justify-between items-center pt-1">
+          <div>
+            <div class="text-[10px] font-bold text-blue-500 tracking-wider">LONDON, UK</div>
+            <div class="text-2xl font-black text-white flex items-center space-x-1">
+              <span>cuedup</span>
+              <span class="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+            </div>
+          </div>
+          <div class="flex items-center space-x-3">
+            <button class="w-9 h-9 rounded-full bg-[#1E1E22] flex items-center justify-center text-slate-300 hover:text-white">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>
+            </button>
+            <div class="relative">
+              <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-sm text-white">AV</div>
+              <span class="absolute -bottom-1 -right-1 bg-blue-600 text-white text-[9px] font-bold px-1 rounded">A+</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Player Stats Summary Card -->
+        <div class="bg-[#1E1E22] rounded-2xl p-4 flex justify-between items-center border border-slate-800">
+          <div>
+            <div class="text-lg font-black text-white">1,847</div>
+            <div class="text-[10px] font-bold text-slate-400">ELO RATING</div>
+          </div>
+          <div>
+            <div class="text-lg font-black text-white">74<span class="text-xs font-normal">%</span></div>
+            <div class="text-[10px] font-bold text-slate-400">WIN RATE</div>
+          </div>
+          <div>
+            <div class="text-lg font-black text-blue-400">W5</div>
+            <div class="text-[10px] font-bold text-slate-400">STREAK</div>
+          </div>
+          <div>
+            <div class="text-lg font-black text-white">38</div>
+            <div class="text-[10px] font-bold text-slate-400">MATCHES</div>
+          </div>
+        </div>
+
+        <!-- Challenges Header -->
+        <div class="flex items-center space-x-2">
+          <span class="font-bold text-base text-white">Challenges</span>
+          <span id="challenge-badge-count" class="bg-blue-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center">2</span>
+        </div>
+
+        <!-- Challenge Cards -->
+        <div id="challenges-list" class="space-y-3">
+          <!-- Card 1 -->
+          <div id="challenge-c1" class="bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-start">
+              <div class="flex items-center space-x-3">
+                <div class="relative">
+                  <div class="w-10 h-10 rounded-full bg-amber-700 flex items-center justify-center font-bold text-sm text-white">DO</div>
+                  <span class="absolute -bottom-1 -right-1 bg-blue-600 text-white text-[9px] font-bold px-1 rounded">A+</span>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-1">
+                    <span class="font-bold text-sm text-white">Darius Okafor</span>
+                    <span class="text-xs text-slate-400">@dariusk</span>
+                  </div>
+                  <div class="text-xs text-slate-400">challenged you to <strong class="text-white">8-Ball</strong></div>
+                </div>
+              </div>
+              <span class="bg-slate-800 text-slate-300 text-[10px] font-bold px-2 py-0.5 rounded-md">Casual</span>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center space-x-2">
+              <span>📍 Breaks Bar & Billiards</span>
+              <span>•</span>
+              <span>⏰ Tonight • 8 PM</span>
+            </div>
+
+            <div class="flex space-x-2 pt-1">
+              <button onclick="declineChallenge('c1')" class="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800">Decline</button>
+              <button onclick="acceptChallenge('c1')" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-500 flex items-center justify-center space-x-1"><span>Accept</span> <span>✦</span></button>
+            </div>
+          </div>
+
+          <!-- Card 2 -->
+          <div id="challenge-c2" class="bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-3">
+            <div class="flex justify-between items-start">
+              <div class="flex items-center space-x-3">
+                <div class="relative">
+                  <div class="w-10 h-10 rounded-full bg-emerald-800 flex items-center justify-center font-bold text-sm text-white">LM</div>
+                  <span class="absolute -bottom-1 -right-1 bg-amber-500 text-slate-950 text-[9px] font-bold px-1 rounded">B</span>
+                </div>
+                <div>
+                  <div class="flex items-center space-x-1">
+                    <span class="font-bold text-sm text-white">Lena Marchetti</span>
+                    <span class="text-xs text-slate-400">@lenam</span>
+                  </div>
+                  <div class="text-xs text-slate-400">challenged you to <strong class="text-white">Snooker</strong></div>
+                </div>
+              </div>
+              <span class="bg-amber-500/20 text-amber-400 text-[10px] font-bold px-2 py-0.5 rounded-md">Ranked</span>
+            </div>
+
+            <div class="text-xs text-slate-400 flex items-center space-x-2">
+              <span>📍 The Cue Room</span>
+              <span>•</span>
+              <span>⏰ Sat • 3 PM</span>
+            </div>
+
+            <div class="flex space-x-2 pt-1">
+              <button onclick="declineChallenge('c2')" class="flex-1 py-2 text-xs font-bold rounded-xl border border-slate-700 text-slate-300 hover:bg-slate-800">Decline</button>
+              <button onclick="acceptChallenge('c2')" class="flex-1 py-2 text-xs font-bold rounded-xl bg-blue-600 text-white hover:bg-blue-500 flex items-center justify-center space-x-1"><span>Accept</span> <span>✦</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Players Near You -->
+        <div class="flex justify-between items-center pt-2">
+          <span class="font-bold text-base text-white">Players Near You</span>
+          <button class="text-xs font-bold text-blue-400 hover:underline">Challenge</button>
+        </div>
+
+        <!-- Player Radar Carousel -->
+        <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1">
+          <div class="bg-[#1E1E22] rounded-2xl p-3 w-28 flex-shrink-0 flex flex-col items-center border border-slate-800 space-y-1">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full bg-slate-700 flex items-center justify-center font-bold text-white text-sm">M</div>
+              <span class="w-3 h-3 bg-emerald-500 border-2 border-[#1E1E22] rounded-full absolute top-0 right-0"></span>
+              <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[8px] font-bold px-1 rounded">B+</span>
+            </div>
+            <div class="font-bold text-xs text-white pt-1">Marcus</div>
+            <div class="text-[10px] text-slate-400">9-Ball</div>
+          </div>
+
+          <div class="bg-[#1E1E22] rounded-2xl p-3 w-28 flex-shrink-0 flex flex-col items-center border border-slate-800 space-y-1">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full bg-rose-800 flex items-center justify-center font-bold text-white text-sm">S</div>
+              <span class="w-3 h-3 bg-emerald-500 border-2 border-[#1E1E22] rounded-full absolute top-0 right-0"></span>
+              <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[8px] font-bold px-1 rounded">A</span>
+            </div>
+            <div class="font-bold text-xs text-white pt-1">Sofia</div>
+            <div class="text-[10px] text-slate-400">Snooker</div>
+          </div>
+
+          <div class="bg-[#1E1E22] rounded-2xl p-3 w-28 flex-shrink-0 flex flex-col items-center border border-slate-800 space-y-1">
+            <div class="relative">
+              <div class="w-12 h-12 rounded-full bg-purple-800 flex items-center justify-center font-bold text-white text-sm">P</div>
+              <span class="w-3 h-3 bg-slate-500 border-2 border-[#1E1E22] rounded-full absolute top-0 right-0"></span>
+              <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[8px] font-bold px-1 rounded">B+</span>
+            </div>
+            <div class="font-bold text-xs text-white pt-1">Priya</div>
+            <div class="text-[10px] text-slate-400">8-Ball</div>
+          </div>
+        </div>
+
+        <!-- Pub Tournament Banner -->
+        <div class="bg-gradient-to-r from-blue-900 to-blue-700 rounded-2xl p-4 flex justify-between items-center text-white">
+          <div>
+            <div class="font-bold text-sm">Pub Tournaments</div>
+            <div class="text-[11px] text-blue-200">Low budget entry • Free practice tables</div>
+          </div>
+          <button class="bg-white text-blue-900 text-xs font-bold px-3 py-1.5 rounded-lg">Host One</button>
+        </div>
+      </div>
+
+      <!-- SCREEN 2: VENUES TAB -->
+      <div id="tab-venues" class="space-y-4 hidden">
+        <div>
+          <div class="text-xl font-black text-white">Pool Venues & Deals</div>
+          <div class="text-xs text-slate-400">Find cheap tables & pub tournament nights near you</div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="relative">
+          <input id="venue-search" type="text" placeholder="Search by venue or district..." onkeyup="filterVenues()" class="w-full bg-[#1E1E22] border border-slate-800 rounded-xl px-9 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-600" />
+          <svg class="w-4 h-4 text-slate-400 absolute left-3 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        </div>
+
+        <!-- Filter Chips -->
+        <div class="flex space-x-2">
+          <button onclick="setVenueFilter('all')" id="filter-all" class="px-3 py-1.5 rounded-full text-xs font-bold bg-blue-600 text-white">All</button>
+          <button onclick="setVenueFilter('cheap')" id="filter-cheap" class="px-3 py-1.5 rounded-full text-xs font-bold bg-[#1E1E22] text-slate-400 border border-slate-800">Under $15/hr</button>
+          <button onclick="setVenueFilter('tournaments')" id="filter-tournaments" class="px-3 py-1.5 rounded-full text-xs font-bold bg-[#1E1E22] text-slate-400 border border-slate-800">Pub Specials</button>
+        </div>
+
+        <!-- Venues List -->
+        <div id="venues-list" class="space-y-3">
+          <div class="venue-card bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-2" data-price="12" data-special="true">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-bold text-sm text-white">Breaks Bar & Billiards</div>
+                <div class="text-xs text-slate-400">📍 Covent Garden • 1.2 km away</div>
+              </div>
+              <span class="bg-emerald-500/20 text-emerald-400 font-black text-xs px-2.5 py-1 rounded-lg">$12/hr</span>
+            </div>
+            <div class="text-xs text-slate-300"><strong>Tables:</strong> 12 (8ft Supreme & 9ft Rasson)</div>
+            <div class="bg-blue-600/10 border border-blue-500/20 rounded-lg p-2 text-[11px] text-blue-400 flex items-center space-x-1.5">
+              <span>🔥</span>
+              <span><strong>Tuesday Special:</strong> $10 Tournament night + free practice table</span>
+            </div>
+          </div>
+
+          <div class="venue-card bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-2" data-price="14" data-special="true">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-bold text-sm text-white">The Cue Room & Pub</div>
+                <div class="text-xs text-slate-400">📍 Soho • 2.4 km away</div>
+              </div>
+              <span class="bg-emerald-500/20 text-emerald-400 font-black text-xs px-2.5 py-1 rounded-lg">$14/hr</span>
+            </div>
+            <div class="text-xs text-slate-300"><strong>Tables:</strong> 8 (English 8-Ball & Snooker)</div>
+            <div class="bg-blue-600/10 border border-blue-500/20 rounded-lg p-2 text-[11px] text-blue-400 flex items-center space-x-1.5">
+              <span>🎯</span>
+              <span><strong>Amateur Ladder:</strong> Low-cost $5 entry ladder matches Sat 3 PM</span>
+            </div>
+          </div>
+
+          <div class="venue-card bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-2" data-price="22" data-special="false">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="font-bold text-sm text-white">Hurricane Snooker Club</div>
+                <div class="text-xs text-slate-400">📍 Camden • 4.1 km away</div>
+              </div>
+              <span class="bg-slate-800 text-slate-300 font-black text-xs px-2.5 py-1 rounded-lg">$22/hr</span>
+            </div>
+            <div class="text-xs text-slate-300"><strong>Tables:</strong> 18 Full Size Star Snooker</div>
+            <div class="text-[11px] text-slate-400">Off-peak discount: $12/hr before 5 PM weekdays</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 3: COMPETE TAB -->
+      <div id="tab-compete" class="space-y-4 hidden">
+        <div>
+          <div class="text-xl font-black text-white">Compete & Matchmaking</div>
+          <div class="text-xs text-slate-400">Pairing with similar skill levels (No skill gap anxiety)</div>
+        </div>
+
+        <div class="bg-[#1E1E22] rounded-2xl p-5 border border-slate-800 text-center space-y-3">
+          <div class="w-12 h-12 rounded-full bg-blue-600/20 text-blue-500 flex items-center justify-center mx-auto text-xl">⚡</div>
+          <div class="font-bold text-base text-white">Instant Skill Match</div>
+          <div class="text-xs text-slate-400">Matches you with players near ELO 1,847 (±100) for a balanced, enjoyable game.</div>
+          <button id="matchmaking-btn" onclick="toggleMatchmaking()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition-all">Find Casual Match</button>
+        </div>
+
+        <div class="font-bold text-sm text-white pt-2 flex items-center space-x-1">
+          <span class="text-amber-400">🏆</span>
+          <span>London Local Leaderboard</span>
+        </div>
+
+        <div class="space-y-2">
+          <div class="bg-[#1E1E22] rounded-xl p-3 border border-slate-800 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="font-black text-amber-400 text-xs w-4">#1</span>
+              <div class="w-8 h-8 rounded-full bg-amber-700 flex items-center justify-center text-xs font-bold">DO</div>
+              <div>
+                <div class="font-bold text-xs text-white">Darius Okafor</div>
+                <div class="text-[10px] text-slate-400">Master cueist</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-black text-xs text-blue-400">2,140 ELO</div>
+              <div class="text-[10px] text-emerald-400 font-bold">82% Win</div>
+            </div>
+          </div>
+
+          <div class="bg-[#1E1E22] rounded-xl p-3 border border-slate-800 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+              <span class="font-black text-amber-400 text-xs w-4">#2</span>
+              <div class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-xs font-bold">AV</div>
+              <div>
+                <div class="font-bold text-xs text-white">Alex Vance (You)</div>
+                <div class="text-[10px] text-slate-400">8-Ball Specialist</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="font-black text-xs text-blue-400">1,847 ELO</div>
+              <div class="text-[10px] text-emerald-400 font-bold">74% Win</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCREEN 4: PROFILE TAB -->
+      <div id="tab-profile" class="space-y-4 hidden">
+        <div class="flex flex-col items-center pt-2 space-y-2">
+          <div class="relative">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-2xl text-white">AV</div>
+            <span class="absolute bottom-0 right-0 bg-blue-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">A+</span>
+          </div>
+          <div class="text-center">
+            <div class="font-bold text-lg text-white">Alex Vance</div>
+            <div class="text-xs text-slate-400">@alexv • London, UK</div>
+          </div>
+          <button class="bg-[#1E1E22] border border-slate-800 text-xs font-bold text-white px-4 py-2 rounded-xl flex items-center space-x-2">
+            <span>📷</span>
+            <span>Show Player Pass QR</span>
+          </button>
+        </div>
+
+        <div class="bg-[#1E1E22] rounded-2xl p-4 border border-slate-800 space-y-3">
+          <div class="font-bold text-xs text-white flex items-center space-x-1">
+            <span class="text-amber-400">🎖️</span>
+            <span>Badges & Milestones</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="bg-slate-900/60 p-2.5 rounded-xl">
+              <div class="text-xl">🔥</div>
+              <div class="text-[10px] font-bold text-slate-300 pt-1">5 Streak</div>
+            </div>
+            <div class="bg-slate-900/60 p-2.5 rounded-xl">
+              <div class="text-xl">🎱</div>
+              <div class="text-[10px] font-bold text-slate-300 pt-1">8-Ball Pro</div>
+            </div>
+            <div class="bg-slate-900/60 p-2.5 rounded-xl">
+              <div class="text-xl">🍺</div>
+              <div class="text-[10px] font-bold text-slate-300 pt-1">Pub Champ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation Bar Scaffold -->
+    <div class="absolute bottom-3 left-3 right-3 bg-[#1A1A1E]/95 backdrop-blur-md rounded-3xl border border-slate-800/80 p-2 flex justify-around items-center z-30">
+      <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl bg-blue-600 text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+        <span class="text-[10px] font-bold">Home</span>
+      </button>
+
+      <button onclick="switchTab('compete')" id="nav-compete" class="flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl text-slate-400 hover:text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+        <span class="text-[10px] font-bold">Compete</span>
+      </button>
+
+      <button onclick="switchTab('venues')" id="nav-venues" class="flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl text-slate-400 hover:text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        <span class="text-[10px] font-bold">Venues</span>
+      </button>
+
+      <button onclick="switchTab('profile')" id="nav-profile" class="flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl text-slate-400 hover:text-white transition-all">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+        <span class="text-[10px] font-bold">Profile</span>
+      </button>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      ['home', 'compete', 'venues', 'profile'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const navBtn = document.getElementById(`nav-${t}`);
+        navBtn.className = "flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl text-slate-400 hover:text-white transition-all";
+      });
+
+      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+      const activeNav = document.getElementById(`nav-${tabName}`);
+      activeNav.className = "flex flex-col items-center space-y-1 px-4 py-1.5 rounded-2xl bg-blue-600 text-white transition-all";
+    }
+
+    function acceptChallenge(id) {
+      const card = document.getElementById(`challenge-${id}`);
+      card.innerHTML = `
+        <div class="bg-emerald-500/15 border border-emerald-500/30 rounded-xl p-3 text-emerald-400 text-xs font-bold flex items-center space-x-2">
+          <span>✓</span>
+          <span>Challenge Accepted! Match added to schedule.</span>
+        </div>
+      `;
+      decrementBadge();
+    }
+
+    function declineChallenge(id) {
+      const card = document.getElementById(`challenge-${id}`);
+      card.innerHTML = `
+        <div class="bg-rose-500/15 border border-rose-500/30 rounded-xl p-3 text-rose-400 text-xs font-bold">
+          Challenge Declined.
+        </div>
+      `;
+      decrementBadge();
+    }
+
+    function decrementBadge() {
+      const badge = document.getElementById('challenge-badge-count');
+      let count = parseInt(badge.innerText);
+      if (count > 0) {
+        count--;
+        badge.innerText = count;
+      }
+    }
+
+    let isSearching = false;
+    function toggleMatchmaking() {
+      const btn = document.getElementById('matchmaking-btn');
+      isSearching = !isSearching;
+      if (isSearching) {
+        btn.innerText = "Searching for Opponent...";
+        btn.className = "w-full py-2.5 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl animate-pulse";
+      } else {
+        btn.innerText = "Find Casual Match";
+        btn.className = "w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl transition-all";
+      }
+    }
+
+    let activeFilter = 'all';
+    function setVenueFilter(filter) {
+      activeFilter = filter;
+      ['all', 'cheap', 'tournaments'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}`);
+        if (f === filter) {
+          btn.className = "px-3 py-1.5 rounded-full text-xs font-bold bg-blue-600 text-white";
+        } else {
+          btn.className = "px-3 py-1.5 rounded-full text-xs font-bold bg-[#1E1E22] text-slate-400 border border-slate-800";
+        }
+      });
+      filterVenues();
+    }
+
+    function filterVenues() {
+      const query = document.getElementById('venue-search').value.toLowerCase();
+      const cards = document.querySelectorAll('.venue-card');
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        const price = parseFloat(card.getAttribute('data-price'));
+        const special = card.getAttribute('data-special') === 'true';
+
+        let matchesFilter = true;
+        if (activeFilter === 'cheap') matchesFilter = price < 15;
+        if (activeFilter === 'tournaments') matchesFilter = special;
+
+        const matchesQuery = text.includes(query);
+
+        if (matchesFilter && matchesQuery) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+  </script>
+</body>
+</html>
